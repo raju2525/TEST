@@ -1,55 +1,32 @@
-import cv2
-import numpy as np
-import os
-import tempfile
-from inference_sdk import InferenceHTTPClient
+# Creating a list
+fruits = ["apple", "banana", "cherry"]
 
-# Initialize the client
-CLIENT = InferenceHTTPClient(
-    api_url="https://detect.roboflow.com",
-    api_key="XCjCnsDvWNwavem9Gk50"
-)
+# Accessing elements
+print(fruits[0])  # Output: apple
+print(fruits[-1]) # Output: cherry
 
-# Start video capture (0 for the default webcam)
-cap = cv2.VideoCapture(0)
+# Modifying elements
+fruits[1] = "blueberry"
+print(fruits)  # Output: ['apple', 'blueberry', 'cherry']
 
-# Check if the webcam is opened successfully
-if not cap.isOpened():
-    print("Error: Could not open webcam.")
-    exit()
+# Adding elements
+fruits.append("date")
+print(fruits)  # Output: ['apple', 'blueberry', 'cherry', 'date']
 
-while True:
-    # Capture frame-by-frame
-    ret, frame = cap.read()
+# Removing elements
+fruits.remove("blueberry")
+print(fruits)  # Output: ['apple', 'cherry', 'date']
 
-    # If frame is read correctly, ret is True
-    if not ret:
-        print("Error: Failed to capture image.")
-        break
+# List length
+print(len(fruits))  # Output: 3
 
-    # Create a temporary file to save the image
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp_file:
-        temp_file_path = temp_file.name
+# Slicing a list
+print(fruits[1:3])  # Output: ['cherry', 'date']
 
-    # Save the current frame to the temporary file
-    cv2.imwrite(temp_file_path, frame)
+# Looping through a list
+for fruit in fruits:
+    print(fruit)
 
-    # Perform inference on the captured frame using the file path
-    result = CLIENT.infer(temp_file_path, model_id="grains-detection-ykdtf/2")
-
-    # Print the result
-    print(result)
-
-    # Show the frame in a window
-    cv2.imshow("Webcam Feed", frame)
-
-    # Break the loop if the 'q' key is pressed
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-    # Optionally, remove the temporary file after inference
-    os.remove(temp_file_path)
-
-# Release the webcam and close the OpenCV window
-cap.release()
-cv2.destroyAllWindows()
+# List comprehension
+squares = [x**2 for x in range(10)]
+print(squares)  # Output: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
